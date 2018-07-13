@@ -19,8 +19,8 @@ public class Noeud  implements Comparable<Noeud>{
 	public Noeud(int ID) {
 		this.id = ID; 
 		nbVoisins = 0;
-		successeurs = null;
-		arcs = null;
+		successeurs = new ArrayList<Noeud>();
+		arcs = new ArrayList<Integer>();
 	}
 	
 	
@@ -56,6 +56,14 @@ public class Noeud  implements Comparable<Noeud>{
 
 	public void setSuccesseurs(ArrayList<Noeud> successeurs) {
 		this.successeurs = successeurs;
+	}
+	
+	public void setSuccesseurs(Noeud successeurs, int poids) {
+		this.successeurs.add(successeurs);
+		this.arcs.add(poids);
+		this.nbVoisins = this.nbVoisins + 1;
+		
+		
 	}
 
 
@@ -142,14 +150,13 @@ public class Noeud  implements Comparable<Noeud>{
 	// revoie le nouveau nombre de voisins
 	public int ajouteVoisin(Noeud v, int d) {
 		// v est voisin 
-		if(this.successeurs != null) {
+		if(this.successeurs != null && this.nbVoisins != 0) {
 			int indexV = this.estVoisin(v);  
 			if(indexV != -1) {
 				this.successeurs.add(v); 
 				this.arcs.add(d);
 				this.nbVoisins = this.nbVoisins+1; 
-			}
-			else {
+			}else {
 				this.successeurs.add(v); 
 				this.arcs.add(d); 
 				this.nbVoisins = this.nbVoisins+1; 
@@ -193,7 +200,8 @@ public class Noeud  implements Comparable<Noeud>{
 		System.out.println("Id: "+this.id);
 		System.out.println("Nombre de voisin: "+this.nbVoisins);
 		System.out.println("Voisin :");
-		if(this.successeurs != null) {
+		if(this.successeurs != null && this.nbVoisins != 0) {
+			
 			for(int i = 0 ; i < this.successeurs.size(); i++) {
 				System.out.print(this.successeurs.get(i).id);
 			}

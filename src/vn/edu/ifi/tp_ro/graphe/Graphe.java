@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import vn.edu.ifi.tp_ro.fichier.Fichier;
 import vn.edu.ifi.tp_ro.noeud.Noeud;
+import vn.edu.ifi.tp_ro.utilisation.Utilisation;
 
 public class Graphe {
 
@@ -13,7 +15,7 @@ public class Graphe {
 	
 	public Graphe() {
 		nbNoeuds = 0;
-		noeuds = null;
+		noeuds = new ArrayList<Noeud>();
 	}
 	
 	public Graphe(Noeud[] nds) {
@@ -24,20 +26,53 @@ public class Graphe {
 		}
 	}
 	
-	public static ArrayList<Noeud> parcoursGraphe(Graphe g) {
+	public int getNbNoeuds() {
+		return nbNoeuds;
+	}
+
+	public void setNbNoeuds(int nbNoeuds) {
+		this.nbNoeuds = nbNoeuds;
+	}
+
+	public ArrayList<Noeud> getNoeuds() {
+		return noeuds;
+	}
+	
+	public void setNoeuds(Noeud noeuds) {
+		this.setNbNoeuds(this.getNbNoeuds()+1);
+		this.noeuds.add(noeuds);
+	}
+	
+	public void setNoeuds(ArrayList<Noeud> noeuds) {
+		if(this.getNoeuds().size() == 0) {
+			this.noeuds = noeuds;
+		}else {
+			for(int i= 0 ; i< noeuds.size(); i++) {
+				this.setNoeuds(noeuds.get(i));
+			}
+		}
 		
+	}
+	
+
+	public static ArrayList<Noeud> parcoursGraphe(Graphe g) {
+		System.out.println("nombre de noeud : "+g.getNbNoeuds());
 		LinkedList<Noeud> Q = new LinkedList<Noeud>(); 
 	
 		ArrayList<Noeud> S = new ArrayList<Noeud>(); 
-		if(g.nbNoeuds > 0) {
-			Q.add(g.noeuds.get(0));   
+		if(g.getNbNoeuds() > 0) {
+			Q.add(g.getNoeuds().get(0));   
 			while(!Q.isEmpty()){
 				Noeud v = Q.pop();  
+				System.out.println(" taille pop "+ Q.size());
 				System.out.print("Noeude ID : "+v.getId()+" voisons :");
 				for(int i = 0; i < v.getNbVoisins(); i++) {
-					System.out.print(v.getSuccesseurs().get(i).getId()+" ");
+					System.out.print(v.getSuccesseurs().get(i).getId()+"**");
 					if(!Q.contains(v.getSuccesseurs().get(i)) && !S.contains(v.getSuccesseurs().get(i))) {
 						Q.add(v.getSuccesseurs().get(i));
+						System.out.print(" element ajoute "+v.getSuccesseurs().get(i).getId());
+						System.out.print(" entre "+ i);
+						System.out.print(" taille "+ Q.size());
 					}
 				}
 				System.out.println(" ");
@@ -134,8 +169,38 @@ public class Graphe {
 		return S ; 
 	}
 	
-	// retourne 1 si noeud existe
-	// retourne -1 si noeud n existe pas 
+	public  Noeud rechercheGraphe(int id) {
+		// la FIFO des noeuds a parcourir 
+		LinkedList<Noeud> Q = new LinkedList<Noeud>(); 
+		// liste de noeuds deja parcourus 
+		ArrayList<Noeud> S = new ArrayList<Noeud>();
+		Noeud  trouver = null; 
+		int indexNoeud = 0 ; 
+		if(this.getNbNoeuds() > 0) {
+			Q.add(this.getNoeuds().get(0));   
+			while(!Q.isEmpty() && trouver == null){
+				Noeud v = Q.pop();
+				if(v.getId() != id) {
+					for(int i = 0; i < v.getNbVoisins(); i++) {
+						if(!Q.contains(v.getSuccesseurs().get(i)) && !S.contains(v.getSuccesseurs().get(i))) {
+							Q.add(v.getSuccesseurs().get(i));
+						}
+					}
+					S.add(v); 
+				}else {
+					trouver = v; 
+				}
+			}
+			
+		}
+		return trouver ; 
+	}
+	
+	
+	/**
+	*retourne 1 si noeud existe
+	*retourne -1 si noeud n existe pas 
+	*/
 	public static int rechercheGraphe(Graphe g, Noeud t) {
 		// la FIFO des noeuds a parcourir 
 		LinkedList<Noeud> Q = new LinkedList<Noeud>(); 
@@ -174,79 +239,127 @@ public class Graphe {
 		return trouver ; 
 	}
 	
+	/**
+	 * inverser tous les arcs sur ce chemin
+	 * @param chemin
+	 * @return
+	 */
+	public boolean inverseChemin(LinkedList<Noeud> chemin) {
+		return true ;
+	}
+	
+	public static Graphe creeGraphe(String fichier) {
+		System.out.println(" ");
+		Graphe graphe;
+		ArrayList<Integer> creeNoeud = new ArrayList<Integer>();
+		if(!fichier.isEmpty()) {
+			graphe = new Graphe();
+			int [][] matrice = null ;
+			Fichier taskfile = new Fichier(fichier); 
+			matrice = taskfile.readFichier();
+			System.out.println("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ");
+			for(int i = 0 ; i < matrice.length; i++ ){
+				System.out.print(" noeud "+i +" successeurs : ");
+				for(int j = 0 ; j < matrice[i].length; j++) {
+					System.out.print(matrice[i][j]+" ");
+				}
+				System.out.println(" ");
+			}
+			System.out.println(" mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+			int nbnoeud = 0;
+			 while(nbnoeud < matrice.length){
+					System.out.print(nbnoeud+"------");
+					if(!creeNoeud.contains(nbnoeud)) {
+						Noeud newNoeud = new Noeud(nbnoeud);
+						Noeud sucNoeud ;
+						for(int j = 0; j< matrice[nbnoeud].length;j++) {
+							if(matrice[nbnoeud][j] != 0 && !creeNoeud.contains(matrice[nbnoeud][j])) {
+								System.out.print(matrice[nbnoeud][j]);
+								sucNoeud = new Noeud(matrice[nbnoeud][j]);
+								creeNoeud.add(matrice[nbnoeud][j]);
+								newNoeud.setSuccesseurs(sucNoeud, 1);
+							}else if(creeNoeud.contains(matrice[nbnoeud][j])) {
+								sucNoeud = graphe.rechercheGraphe(matrice[nbnoeud][j]);
+								newNoeud.setSuccesseurs(sucNoeud, 1);
+							}
+						}
+						graphe.setNoeuds(newNoeud);
+					}else {
+						Noeud newNoeud = graphe.rechercheGraphe(nbnoeud);
+						Noeud sucNoeud ;
+						for(int j = 0; j<  matrice[nbnoeud].length;j++) {
+							if(matrice[nbnoeud][j] != 0 && !creeNoeud.contains(matrice[nbnoeud][j])) {
+								System.out.print(matrice[nbnoeud][j]);
+								sucNoeud = new Noeud(matrice[nbnoeud][j]);
+								creeNoeud.add(matrice[nbnoeud][j]);
+								newNoeud.setSuccesseurs(sucNoeud, 1);
+							}else if(creeNoeud.contains(matrice[nbnoeud][j])){
+								sucNoeud = graphe.rechercheGraphe(matrice[nbnoeud][j]);
+								newNoeud.setSuccesseurs(sucNoeud, 1);
+							}
+						}
+						graphe.setNoeuds(newNoeud);
+					}
+					
+				nbnoeud = nbnoeud + 1;
+			 }
+		}else {
+			graphe = null;
+		}
+		System.out.println(" avant return "+graphe.getNbNoeuds());
+
+		return graphe ;
+	}
+	
+	
+	
+	/**
+	 * cree le reseau a flot correspondant a partir du fichier passe en entree
+	 * @param fichier
+	 * @return
+	 */
+	public static Graphe creeReseau(String fichier) {
+		System.out.println(" ");
+		Graphe graphe;
+		if(!fichier.isEmpty()) {
+			graphe = new Graphe();
+			int [][] matrice = null ;
+			Fichier taskfile = new Fichier(fichier); 
+			matrice = taskfile.readFichier();
+			 int nbnoeud = matrice.length - 1;
+			
+			 while(nbnoeud >=0){
+				System.out.print(nbnoeud+"------");
+				Noeud newNoeud = new Noeud(nbnoeud);
+				for(int j = 0; j< matrice[nbnoeud].length;j++) {
+					if(matrice[nbnoeud][j] != 0) {
+						System.out.print(matrice[nbnoeud][j]);
+						newNoeud.setSuccesseurs(new Noeud(matrice[nbnoeud][j]), 1);
+					}
+				}
+				System.out.println(" ");
+				graphe.setNoeuds(newNoeud);
+				nbnoeud = nbnoeud -1;
+			 }
+		}else {
+			graphe = null;
+		}
+		
+		return graphe ;
+	}
+	
+	/**
+	 * algorithme Ford – Fulkerson utilisant le BFS avec la source s et le puit t.
+	 * @param s
+	 * @param t
+	 * @return
+	 */
+	public int ff(Noeud s, Noeud t) {
+		return 0;
+	}
+	
 	public static void main(String[] args) {
-		Noeud N0 = new Noeud(0)	;
-		N0.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N1 = new Noeud(1)	;
-		N1.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N2  = new Noeud(2); 
-		N2.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N3  = new Noeud(3); 
-		N3.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N4  = new Noeud(4); 
-		N4.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N5  = new Noeud(5); 
-		N4.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N6 = new Noeud(6)	;
-		N6.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N8 = new Noeud(8)	;
-		N8.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud N7 = new Noeud(7)	;
-		N7.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N0.ajouteVoisin(N1, 1); 
-		N0.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N0.ajouteVoisin(N4, 1); 
-		N0.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N1.ajouteVoisin(N2, 1); 
-		N1.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N1.ajouteVoisin(N3, 1); 
-		N1.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N4.ajouteVoisin(N1, 1); 
-		N1.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N2.ajouteVoisin(N4, 1); 
-		N2.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N2.ajouteVoisin(N5, 1); 
-		N2.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N2.ajouteVoisin(N3, 1); 
-		N2.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N3.ajouteVoisin(N6, 1); 
-		N3.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N3.ajouteVoisin(N7, 1); 
-		N3.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N5.ajouteVoisin(N6, 1); 
-		N5.afficheNoeud();
-		System.out.println("-------------------------------------");
-		N6.ajouteVoisin(N7, 1); 
-		N6.afficheNoeud();
-		System.out.println("-------------------------------------");
-		Noeud[] TabNoeud = {N0, N1, N2, N3, N4, N5, N6, N7}; 
-		Graphe g = new Graphe(TabNoeud); 
-		System.out.println("-------------------------------------");
-		System.out.println("Graphe : "+g.nbNoeuds);
-		Graphe.parcoursGraphe(g);
-		System.out.println("-------------------------------------");
-		Graphe.courtCheminGraphe(g, N0, N6);
-		System.out.println("\n------------------------------------");
-		//Graphe.rechercheGraphe(g, N4);
+		Graphe.parcoursGraphe(Utilisation.graphBi);
 		
 		
 	}
