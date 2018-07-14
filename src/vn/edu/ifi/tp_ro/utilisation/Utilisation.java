@@ -1,5 +1,6 @@
 package vn.edu.ifi.tp_ro.utilisation;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import vn.edu.ifi.tp_ro.fichier.Fichier;
@@ -35,8 +36,11 @@ public class Utilisation {
 		Utilisation user  = new Utilisation(); 
 		user.menu();
 		Graphe.parcoursGraphe(Utilisation.graphBi);
-		// TODO Auto-generated method stub
-
+		LinkedList<Noeud> c = Utilisation.graphBi.cheminBFS(Utilisation.graphBi.getNoeuds().get(0), Utilisation.graphBi.getNoeuds().get(7));
+		for(int i = 0 ; i < c.size(); i++) {
+			
+			System.out.print("\n  le chemin "+c.get(i).getId()+" ");
+		}
 	}
 
 }

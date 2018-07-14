@@ -64,15 +64,11 @@ public class Graphe {
 			Q.add(g.getNoeuds().get(0));   
 			while(!Q.isEmpty()){
 				Noeud v = Q.pop();  
-				System.out.println(" taille pop "+ Q.size());
 				System.out.print("Noeude ID : "+v.getId()+" voisons :");
 				for(int i = 0; i < v.getNbVoisins(); i++) {
 					System.out.print(v.getSuccesseurs().get(i).getId()+"**");
 					if(!Q.contains(v.getSuccesseurs().get(i)) && !S.contains(v.getSuccesseurs().get(i))) {
 						Q.add(v.getSuccesseurs().get(i));
-						System.out.print(" element ajoute "+v.getSuccesseurs().get(i).getId());
-						System.out.print(" entre "+ i);
-						System.out.print(" taille "+ Q.size());
 					}
 				}
 				System.out.println(" ");
@@ -85,6 +81,60 @@ public class Graphe {
 			System.out.print(S.get(i).getId()+" ");
 		}
 		return S; 
+	}
+	
+	public LinkedList<Noeud> cheminBFS(Noeud s, Noeud t){
+		System.out.println("\n source "+s.getId()+" et destination "+t.getId());
+		LinkedList<Noeud> chemin = new LinkedList<Noeud>();
+		ArrayList<Noeud> visite = new ArrayList<Noeud>();
+		LinkedList<Noeud> candidate = new LinkedList<Noeud>();
+		if(s.compareTo(t) == 0) {
+			System.out.println(" egalite entre "+s.getId()+" et "+t.getId());
+			chemin.push(s);
+		}else {
+			boolean see = false;
+			candidate.add(s);
+			while(!candidate.isEmpty() && see == false) {
+				System.out.println(" taille candidate "+candidate.size());
+				Noeud v = candidate.pop();
+				if(v.compareTo(t) != 0) {
+					for(int i = 0; i <v.getSuccesseurs().size();i++) {
+						if(candidate.contains(v.getSuccesseurs().get(i)) == false && !visite.contains(v.getSuccesseurs().get(i))) {
+							candidate.add(v.getSuccesseurs().get(i));
+						}
+					}
+					visite.add(v);
+				}else {
+					see = true;
+				}
+			}
+			if(see == false) {
+				chemin = null ;
+			}else {
+				chemin.add(t);
+				System.out.print("\n-----Le court chemain de "+s.getId()+" à "+t.getId()+" est :"+ t.getId()+" ");
+				Noeud m = t;
+				int k = 0;
+				while(k < visite.size()) {
+					Noeud v = visite.get(k);
+					int j = 0;
+					while(j < v.getSuccesseurs().size()  && v.getSuccesseurs().get(j).compareTo(m)!=0) {
+						j=j+1;
+					}
+					if(j< v.getSuccesseurs().size()) {
+						k=0;
+						m = v ;
+						System.out.print(v.getId()+" ");
+						chemin.add(v);
+					}else {
+						k=k+1;
+					}
+				}
+		
+			}
+		}
+			
+		return chemin;
 	}
 	
 	public static void courtCheminGraphe(Graphe g, Noeud s, Noeud t) {
