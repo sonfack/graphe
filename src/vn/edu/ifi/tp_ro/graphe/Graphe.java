@@ -82,7 +82,15 @@ public class Graphe {
 		}
 		return S; 
 	}
-	
+	/**
+	 * Dans la classe Graphe, écrire une méthode
+	 * public LinkedList<Noeud> cheminBFS(Noeud s, Noeud t) qui cherche un plus court chemin (en nombre d’arc) du nœud s au nœud t. La
+	 * méthode renvoi null si un tel chemin n’existe pas.
+	 * 
+	 * @param s noeud 
+	 * @param t noeud 
+	 * @return liste chainee de noeud entre s et t
+	 */
 	public LinkedList<Noeud> cheminBFS(Noeud s, Noeud t){
 		System.out.println("\n source "+s.getId()+" et destination "+t.getId());
 		LinkedList<Noeud> chemin = new LinkedList<Noeud>();
@@ -136,6 +144,9 @@ public class Graphe {
 			
 		return chemin;
 	}
+	
+	
+
 	
 	public static void courtCheminGraphe(Graphe g, Noeud s, Noeud t) {
 		Graphe sg ; 
@@ -295,8 +306,23 @@ public class Graphe {
 	 * @return
 	 */
 	public boolean inverseChemin(LinkedList<Noeud> chemin) {
-		return true ;
+		int index = 0;
+		boolean noChemin = true;
+		while(index < chemin.size()-1 && noChemin == true ) {
+			if(this.cheminBFS(chemin.get(index), chemin.get(index+1))!= null) {
+				chemin.get(index).getSuccesseurs().remove(chemin.get(index+1));
+				chemin.get(index).setNbVoisins(chemin.get(index).getNbVoisins()-1); 
+				chemin.get(index+1).getSuccesseurs().add(chemin.get(index));
+				chemin.get(index+1).setNbVoisins(chemin.get(index+1).getNbVoisins()+1);
+			}else {
+				noChemin = false;
+			}
+			index = index+1;
+		}
+		return noChemin ;
 	}
+	
+	
 	
 	public static Graphe creeGraphe(String fichier) {
 		System.out.println(" ");
