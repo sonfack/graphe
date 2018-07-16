@@ -72,7 +72,9 @@ public class Noeud  implements Comparable<Noeud>{
 		return arcs;
 	}
 
-
+	public void setArcs(int poids) {
+		this.arcs.add(poids);
+	}
 
 	public void setArcs(ArrayList<Integer> arcs) {
 		this.arcs = arcs;

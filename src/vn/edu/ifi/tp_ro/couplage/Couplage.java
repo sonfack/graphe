@@ -1,6 +1,7 @@
 package vn.edu.ifi.tp_ro.couplage;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import vn.edu.ifi.tp_ro.fichier.Fichier;
 import vn.edu.ifi.tp_ro.graphe.Graphe;
@@ -81,8 +82,19 @@ public class Couplage {
 	public static void main(String[] args) {
 		 String fichier = "/home/sonfack/Documents/tache.txt";
 		 Graphe graphe = Couplage.creeReseau(fichier);
+		 graphe.ff(graphe.getNoeuds().get(0), graphe.getNoeuds().get(graphe.getNoeuds().size()-1));
+		 //LinkedList<Noeud> chemin = new LinkedList<Noeud>();
+		// Graphe.parcoursGraphe(graphe);
+		/* chemin =  graphe.cheminBFS(graphe.getNoeuds().get(0), graphe.getNoeuds().get(graphe.getNoeuds().size()-1));
+		 
+		 if(graphe.inverseChemin(chemin)) {
+			 System.out.println("ok");
+		 }else {
+			 System.out.println("okokookokok");
+		 }*/
+		 
 		 Graphe.parcoursGraphe(graphe);
-		
+		 
 	}
 	
 	

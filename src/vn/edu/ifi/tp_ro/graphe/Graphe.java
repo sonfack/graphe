@@ -104,10 +104,10 @@ public class Graphe {
 			System.out.println(" egalite entre "+s.getId()+" et "+t.getId());
 			chemin.push(s);
 		}else {
+			System.out.println(" dans chemin ");
 			boolean see = false;
 			candidate.add(s);
 			while(!candidate.isEmpty() && see == false) {
-				System.out.println(" taille candidate "+candidate.size());
 				Noeud v = candidate.pop();
 				if(v.compareTo(t) != 0) {
 					for(int i = 0; i <v.getSuccesseurs().size();i++) {
@@ -124,7 +124,7 @@ public class Graphe {
 				chemin = null ;
 			}else {
 				chemin.add(t);
-				System.out.print("\n-----Le court chemain de "+s.getId()+" à "+t.getId()+" est :"+ t.getId()+" ");
+				//System.out.print("\n--Le court chemain de "+s.getId()+" à "+t.getId()+" est :"+ t.getId()+" ");
 				Noeud m = t;
 				int k = 0;
 				while(k < visite.size()) {
@@ -136,7 +136,7 @@ public class Graphe {
 					if(j< v.getSuccesseurs().size()) {
 						k=0;
 						m = v ;
-						System.out.print(v.getId()+" ");
+						//System.out.print(v.getId()+" ");
 						chemin.add(v);
 					}else {
 						k=k+1;
@@ -310,19 +310,31 @@ public class Graphe {
 	 * @return
 	 */
 	public boolean inverseChemin(LinkedList<Noeud> chemin) {
-		int index = 0;
+		System.out.println("\n inverse");
+		int index = chemin.size()-1;
 		boolean noChemin = true;
-		while(index < chemin.size()-1 && noChemin == true ) {
-			if(this.cheminBFS(chemin.get(index), chemin.get(index+1))!= null) {
-				chemin.get(index).getSuccesseurs().remove(chemin.get(index+1));
+		while(index > 0 && noChemin == true ) {
+			System.out.println("\n chemin ++++++++++++");
+			if(this.cheminBFS(chemin.get(index), chemin.get(index-1))!= null) {
+				System.out.print("chemin entre "+chemin.get(index).getId()+" et "+chemin.get(index-1).getId());
+				chemin.get(index).getSuccesseurs().remove(chemin.get(index-1));
 				chemin.get(index).setNbVoisins(chemin.get(index).getNbVoisins()-1); 
-				chemin.get(index+1).getSuccesseurs().add(chemin.get(index));
-				chemin.get(index+1).setNbVoisins(chemin.get(index+1).getNbVoisins()+1);
+				chemin.get(index-1).getSuccesseurs().add(chemin.get(index));
+				chemin.get(index-1).setNbVoisins(chemin.get(index-1).getNbVoisins()+1);
+				chemin.get(index-1).setArcs(1);
 			}else {
 				noChemin = false;
+				
 			}
-			index = index+1;
+			index = index-1;
 		}
+		for(int i=0; i<chemin.size();i++) {
+			System.out.print("\n chemin :"+chemin.get(i).getId());
+			for(int j=0;j<chemin.get(i).getSuccesseurs().size();j++) {
+				System.out.print(" "+chemin.get(i).getSuccesseurs().get(j).getId());
+			}
+		}
+		System.out.println(" ");
 		return noChemin ;
 	}
 	
@@ -435,6 +447,23 @@ public class Graphe {
 	 * @return
 	 */
 	public int ff(Noeud s, Noeud t) {
+		boolean noChemin = true ;
+		LinkedList<Noeud> chemin = new LinkedList<Noeud>();
+		int index = 0;
+		int nbSuccesseur = s.getSuccesseurs().size();
+		while(index < nbSuccesseur && noChemin) {
+			System.out.println("\n ffffff ");
+			chemin = this.cheminBFS(s, t);
+			if(chemin != null) {
+				this.inverseChemin(chemin);
+				Graphe.parcoursGraphe(this);
+			}else {
+				System.out.println(" pas de chemin");
+				noChemin= false;
+			}
+			index = index + 1;
+		}
+		System.out.println(" nombre de chemin "+index);
 		return 0;
 	}
 	
