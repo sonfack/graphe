@@ -7,7 +7,7 @@ public class Noeud  implements Comparable<Noeud>{
 	protected int nbVoisins;
 	// c'est plus simple d'ajouter et d'enlever des elements avec une liste qu'avec un array
 	protected ArrayList<Noeud>  successeurs;
-	protected ArrayList<Integer> arcs; //arcs sortant 
+	protected ArrayList<Integer> arcs; //poids  
 	
 	// cree un noeud isole
 	public Noeud() {

@@ -66,7 +66,8 @@ public class Graphe {
 				Noeud v = Q.pop();  
 				System.out.print("Noeude ID : "+v.getId()+" voisons :");
 				for(int i = 0; i < v.getNbVoisins(); i++) {
-					System.out.print(v.getSuccesseurs().get(i).getId()+"**");
+					System.out.print(v.getSuccesseurs().get(i).getId());
+					System.out.print(" poids: "+v.getArcs().get(i)+"  ");
 					if(!Q.contains(v.getSuccesseurs().get(i)) && !S.contains(v.getSuccesseurs().get(i))) {
 						Q.add(v.getSuccesseurs().get(i));
 					}
@@ -82,6 +83,9 @@ public class Graphe {
 		}
 		return S; 
 	}
+	
+	
+	
 	/**
 	 * Dans la classe Graphe, écrire une méthode
 	 * public LinkedList<Noeud> cheminBFS(Noeud s, Noeud t) qui cherche un plus court chemin (en nombre d’arc) du nœud s au nœud t. La
@@ -434,11 +438,5 @@ public class Graphe {
 		return 0;
 	}
 	
-	public static void main(String[] args) {
-		Graphe.parcoursGraphe(Utilisation.graphBi);
-		
-		
-	}
-
 	
 }

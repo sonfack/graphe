@@ -3,6 +3,7 @@ package vn.edu.ifi.tp_ro.utilisation;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import vn.edu.ifi.tp_ro.couplage.Couplage;
 import vn.edu.ifi.tp_ro.fichier.Fichier;
 import vn.edu.ifi.tp_ro.graphe.Graphe;
 import vn.edu.ifi.tp_ro.noeud.Noeud;
@@ -21,7 +22,7 @@ public class Utilisation {
 		 switch(choix) {
 		 case 1: {
 			 String fichier = "/home/sonfack/Documents/tache.txt";
-			 Utilisation.graphBi = Graphe.creeGraphe(fichier);
+			 Utilisation.graphBi = Couplage.creeReseau(fichier);
 			 break ; 
 		 }
 		 default : {
@@ -33,7 +34,7 @@ public class Utilisation {
 	}
 	public static void main(String[] args) {
 		
-		Noeud N0 = new Noeud(0)	;
+		/*Noeud N0 = new Noeud(0)	;
 		N0.afficheNoeud();
 		System.out.println("-------------------------------------");
 		Noeud N1 = new Noeud(1)	;
@@ -49,7 +50,7 @@ public class Utilisation {
 		N4.afficheNoeud();
 		System.out.println("-------------------------------------");
 		Noeud N5  = new Noeud(5); 
-		N4.afficheNoeud();
+		N5.afficheNoeud();
 		System.out.println("-------------------------------------");
 		Noeud N6 = new Noeud(6)	;
 		N6.afficheNoeud();
@@ -76,7 +77,7 @@ public class Utilisation {
 		N1.afficheNoeud();
 		System.out.println("-------------------------------------");
 		N4.ajouteVoisin(N1, 1); 
-		N1.afficheNoeud();
+		N4.afficheNoeud();
 		System.out.println("-------------------------------------");
 		N2.ajouteVoisin(N4, 1); 
 		N2.afficheNoeud();
@@ -106,6 +107,7 @@ public class Utilisation {
 		chemin.add(N1);
 		chemin.add(N2);
 		chemin.add(N3);
+		chemin.add(N4);
 		for(int i = 0;i<chemin.size();i++) {
 			System.out.print("\n "+chemin.get(i).getId()+" : ");
 			for(int j =0; j < chemin.get(i).getNbVoisins();j++) {
@@ -122,12 +124,12 @@ public class Utilisation {
 				}
 				System.out.println(" ");
 			}
-		}
+		}*/
 		
-		/*Utilisation user  = new Utilisation(); 
+		Utilisation user  = new Utilisation(); 
 		user.menu();
 		Graphe.parcoursGraphe(Utilisation.graphBi);
-		LinkedList<Noeud> c = Utilisation.graphBi.cheminBFS(Utilisation.graphBi.getNoeuds().get(0), Utilisation.graphBi.getNoeuds().get(7));
+		/*LinkedList<Noeud> c = Utilisation.graphBi.cheminBFS(Utilisation.graphBi.getNoeuds().get(0), Utilisation.graphBi.getNoeuds().get(7));
 		for(int i = 0 ; i < c.size(); i++) {
 			
 			System.out.print("\n  le chemin "+c.get(i).getId()+" ");
