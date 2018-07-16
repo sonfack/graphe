@@ -15,7 +15,7 @@ public class Couplage {
 	 * @return
 	 */
 	public static Graphe creeReseau(String fichier) {
-		System.out.println(" ");
+		System.out.println("\n\n ");
 		Graphe graphe;
 		ArrayList<Integer> creeNoeud = new ArrayList<Integer>();
 		if(!fichier.isEmpty()) {
@@ -23,7 +23,7 @@ public class Couplage {
 			int [][] matrice = null ;
 			Fichier taskfile = new Fichier(fichier); 
 			matrice = taskfile.readFichier();
-			System.out.println("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ");
+			/*System.out.println("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm ");
 			for(int i = 0 ; i < matrice.length; i++ ){
 				System.out.print(" noeud "+i +" successeurs : ");
 				for(int j = 0 ; j < matrice[i].length; j++) {
@@ -31,7 +31,7 @@ public class Couplage {
 				}
 				System.out.println(" ");
 			}
-			System.out.println(" mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+			System.out.println(" mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");*/
 			int nbnoeud = 0;
 			 while(nbnoeud < matrice.length){
 					System.out.print(nbnoeud+"------");
@@ -72,7 +72,7 @@ public class Couplage {
 		}else {
 			graphe = null;
 		}
-		System.out.println(" avant return "+graphe.getNbNoeuds());
+		System.out.println(" nombre de noeud "+graphe.getNbNoeuds());
 
 		return graphe ;
 	}

@@ -31,7 +31,6 @@ public class Fichier {
 			
 			int indicate = 0; 
 			int tableSize = 0 ; 
-			System.out.println("------------------");
 			while ((sCurrentLine = br.readLine()) != null) {
 				//System.out.println(sCurrentLine);
 				if(indicate == 0) { // noeud source 
@@ -89,7 +88,7 @@ public class Fichier {
 			}
 			System.out.println(" ");
 		}
-		
+		System.out.println("------------------------\n");
 		return listNoeud ; 
 	}
 
